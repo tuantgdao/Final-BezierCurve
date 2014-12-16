@@ -268,7 +268,7 @@ void draw()
 		drawSphere(test);
 		i += .005;
 	}
-	else if ( i >= 1 && i2 < 1)
+	else if (i >= 1 && i2 < 1)
 	{
 		Vector4 test = x2.lip(i2, .1);
 		drawSphere(test);
@@ -423,27 +423,11 @@ float theta = 0;
 void keyboard(unsigned char key, int x, int y)
 {
 	Matrix4 rotate = objCamera.c;
-	Matrix4 r;  
+	Matrix4 r;
 	Matrix4 testRotate;
 	Vector3 test = objCamera.e;
 	switch (key)
 	{
-	case 'b':
-		objCamera.d = Vector3(objCamera.d.x, objCamera.d.y - 1, objCamera.d.z);
-		objCamera.getInverseCamera();
-		break;
-	case 'B':
-		objCamera.d = Vector3(objCamera.d.x, objCamera.d.y + 1, objCamera.d.z);
-		objCamera.getInverseCamera();
-		break;
-	case 'y':
-		objCamera.d = Vector3(objCamera.d.x-1, objCamera.d.y, objCamera.d.z-1);
-		objCamera.getInverseCamera();
-		break;
-	case 'Y':
-		objCamera.d = Vector3(objCamera.d.x + 1, objCamera.d.y, objCamera.d.z + 1);
-		objCamera.getInverseCamera();
-		break;
 	case 'i':
 		testRotate.makeRotateY(1.5);
 		objCamera.c = testRotate*rotate;
@@ -461,20 +445,52 @@ void keyboard(unsigned char key, int x, int y)
 		objCamera.c = testRotate*rotate;
 		break;
 	case 'a':
-		testRotate.makeTranslate(1, 0, 0);
-		objCamera.c = testRotate*rotate;
+		if (c == 1)
+		{
+			objCamera.d = Vector3(objCamera.d.x - 1, objCamera.d.y, objCamera.d.z - 1);
+			objCamera.getInverseCamera();
+		}
+		else
+		{
+			testRotate.makeTranslate(1, 0, 0);
+			objCamera.c = testRotate*rotate;
+		}
 		break;
 	case 'd':
-		testRotate.makeTranslate(-1, 0, 0);
-		objCamera.c = testRotate*rotate;
+		if (c == 1)
+		{
+			objCamera.d = Vector3(objCamera.d.x + 1, objCamera.d.y, objCamera.d.z + 1);
+			objCamera.getInverseCamera();
+		}
+		else
+		{
+			testRotate.makeTranslate(-1, 0, 0);
+			objCamera.c = testRotate*rotate;
+		}
 		break;
 	case 'w':
-		testRotate.makeTranslate(0, -1, 0);
-		objCamera.c = testRotate*rotate;
+		if (c == 1)
+		{
+			objCamera.d = Vector3(objCamera.d.x, objCamera.d.y + 1, objCamera.d.z);
+			objCamera.getInverseCamera();
+		}
+		else
+		{
+			testRotate.makeTranslate(0, -1, 0);
+			objCamera.c = testRotate*rotate;
+		}
 		break;
 	case 's':
-		testRotate.makeTranslate(0, 1, 0);
-		objCamera.c = testRotate*rotate;
+		if (c == 1)
+		{
+			objCamera.d = Vector3(objCamera.d.x, objCamera.d.y - 1, objCamera.d.z);
+			objCamera.getInverseCamera();
+		}
+		else
+		{
+			testRotate.makeTranslate(0, 1, 0);
+			objCamera.c = testRotate*rotate;
+		}
 		break;
 	case 'f':
 		testRotate.makeTranslate(0, 0, 1);
