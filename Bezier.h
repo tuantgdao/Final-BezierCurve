@@ -18,6 +18,9 @@ public:
 	Bezier();
 	Bezier(float, float, float);
 	Bezier(Vector3, Vector3, Vector3, Vector3);
+	Bezier(Vector3, Vector3, Vector3, float);
+	Bezier(Vector4, Vector4, Vector4, Vector4,
+		Vector4, Vector4, Vector4, Vector4, float);
 	void setCamPos(Matrix4);
 	void tessellate(float, float, float);
 	Vector4 lip(float, float);

@@ -142,12 +142,73 @@ void Draw_Skybox(float x, float y, float z, float width, float height, float len
 	glEnd();
 }
 
+Bezier my;
+Bezier my2;
+
+void draw_surface(float width, float height)
+{
+	/* pseudo
+	1. calculate p3-p2
+	2. set new bezier p0 = old bezier p3
+	3. new beier p1 = p0 + old(p3-p2)*/
+
+	Bezier tl = Bezier(width, height, angle);
+	Vector4 d1 = tl.p3 - tl.p2;
+	Vector4 d2 = tl.p7 - tl.p6;
+	Vector4 d3 = tl.p11 - tl.p10;
+	Vector4 d4 = tl.p15 - tl.p14;
+	Vector4 g1 = tl.p3 + d1;
+	Vector4 g2 = tl.p7 + d2;
+	Vector4 g3 = tl.p11 + d3;
+	Vector4 g4 = tl.p15 + d4;
+	cout << "tlp7: " << tl.p7.y << endl;
+	Bezier tr = Bezier(tl.p3, g1, tl.p7, g2,
+						tl.p11, g3, tl.p15, g4, angle);
+	//cout << "p0: " << tr.p0.y << " p3: " << tr.p3.y << " p12: " << tr.p12.y << " p15: " << tr.p15.y << endl;
+	cout << "p4: " << tr.p4.y << " p8: " << tr.p8.y << " p7: " << tr.p7.y << " p11: " << tr.p11.y << endl;
+	cout << "p5: " << tr.p5.y << endl;
+	for (float t1 = -0.5; t1 < 0.49; t1 += 0.01)
+	{
+		for (float t2 = -0.5; t2 < 0.49; t2 += 0.01)
+		{
+			glColor3f(1, 0, 0);
+			tl.tessellate(t1, t2, .1);
+			glColor3f(0, 0, 1);
+			tr.tessellate(t1, t2, .1);
+		}
+	}
+}
 
 void Draw_Bezier(float width, float height)
 {
-	glColor3f(0, 0, 1);
+	float x = width / 2;
+	float y = height / 2;
 
-	Bezier my = Bezier(width, height, angle);
+	Matrix4 t;
+	t.makeTranslate(-x, -y, 0);
+
+	Matrix4 c = objCamera.c;
+	c = t*c;
+	c.transpose();
+	glLoadMatrixd(c.getPointer());
+	glColor3f(0, 0, 1);
+	my = Bezier(width, height, angle);
+	for (float t1 = -0.5; t1 < 0.49; t1 += 0.01)
+	{
+		for (float t2 = -0.5; t2 < 0.49; t2 += 0.01)
+		{
+			my.tessellate(t1, t2, .1);
+		}
+	}
+
+	t.makeTranslate(x, -y, 0);
+	c = objCamera.c;
+	c = t*c;
+	c.transpose();
+	glLoadMatrixd(c.getPointer());
+
+	glColor3f(1, 0, 0);
+	my2 = Bezier(width, height, angle);
 	for (float t1 = -0.5; t1 < 0.49; t1 += 0.01)
 	{
 		for (float t2 = -0.5; t2 < 0.49; t2 += 0.01)
@@ -358,7 +419,7 @@ void display()
 	glLoadMatrixd(cam.getPointer());
 
 	glColor3f(1, 1, 1);
-	Draw_Skybox(0, 0, 0, 100, 100, 100);
+	//Draw_Skybox(0, 0, 0, 100, 100, 100);
 
 	Matrix4 ct;
 	ct.makeTranslate(-1, 0, 0);
@@ -367,13 +428,16 @@ void display()
 	cam.transpose();
 	glLoadMatrixd(cam.getPointer());
 	glColor3f(1, 0, 0);
-	glutSolidCube(1);
+	//glutSolidCube(1);
 
 	if (p == 1)
 		drawPath();
 	angle += .01;
 
-	draw();
+	//draw();
+
+	//Draw_Bezier(4.75, 4.75);
+	draw_surface(4.75,4.75);
 
 	glFlush();
 	glutSwapBuffers();

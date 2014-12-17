@@ -1,5 +1,51 @@
 #include "Bezier.h"
 
+Bezier::Bezier(Vector4 sp0, Vector4 sp1,
+	Vector4 sp4, Vector4 sp5,
+	Vector4 sp8, Vector4 sp9,
+	Vector4 sp12, Vector4 sp13, float angle)
+{
+	p0 = sp0;
+	p1 = sp1;
+	p4 = sp4;
+	p5 = sp5;
+	p8 = sp8;
+	p9 = sp9;
+	p12 = sp12;
+	p13 = sp13;
+
+	float widthx = p1.x - p0.x;
+	//float heightz = p4.z - p0.z;
+
+	/*float s = widthx - heightz;
+	float a = widthx + heightz;*/
+	
+	//p2, p3
+	p2.x = p1.x + widthx;
+	p2.z = p1.z;
+	p3.x = p2.x + widthx;
+	p3.z = p2.z;
+	//p3.y = cos(a*angle);
+
+	p6.x = p5.x + widthx;
+	p6.z = p5.z;
+	p7.x = p6.x + widthx;
+	p7.z = p6.z;
+	//p7.y = cos(s*angle)/50;
+
+	p10.x = p9.x + widthx;
+	p10.z = p9.z;
+	p11.x = p10.x + widthx;
+	p11.z = p10.z;
+	//p11.y = cos(a*angle);
+
+	p14.x = p13.x + widthx;
+	p14.z = p13.z;
+	p15.x = p14.x + widthx;
+	p15.z = p14.z;
+	//p15.y = cos(s*angle);
+}
+
 Bezier::Bezier(float u, float v, float angle)
 {
 	float q = u / 3; //q is horizontal
@@ -20,7 +66,7 @@ Bezier::Bezier(float u, float v, float angle)
 	p3.z = 0 * r;
 
 	p1.y = sin(s*angle);
-	p3.y = cos(a*angle);
+	//p3.y = cos(a*angle);
 
 	//p4-p7
 	p4.x = 0 * q;
@@ -48,7 +94,7 @@ Bezier::Bezier(float u, float v, float angle)
 	p11.z = 2 * r;
 
 	p9.y = sin(s*angle);
-	p11.y = cos(a*angle);
+	//p11.y = cos(a*angle);
 
 	//p12-p15
 	p12.x = 0 * q;
